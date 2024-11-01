@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Selection</title>
+    <style>
+        /* Reset and basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            width: 100%;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .disease-buttons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .disease-btn, .back-btn {
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            color: white;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            height: 100%;
+        }
+
+        .disease-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            background: rgba(52, 152, 219, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Form styling */
+        .form-container {
+            display: none;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container label {
+            display: block;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .form-container input {
+            width: 80%;
+            padding: 0.6rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Popup styling */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-content {
+            background: #2c3e50;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 400px;
+            text-align: center;
+            color: white;
+        }
+
+        .popup-content h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .popup-content p {
+            font-size: 1.2rem;
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 80%;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .close-popup-btn {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background: #3498db;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Select a Disease to Predict</h2>
+        <div class="disease-buttons-container">
+            <button class="disease-btn" onclick="toggleForm('cancerForm')">Cancer Prediction</button>
+            <button class="disease-btn" onclick="toggleForm('heartForm')">Heart Disease Prediction</button>
+            <button class="disease-btn" onclick="toggleForm('parkinsonsForm')">Parkinson's Prediction</button>
+            <button class="disease-btn" onclick="toggleForm('diabetesForm')">Diabetes Prediction</button>
+        </div>
+
+        <!-- Prediction Result Popup -->
+        <div class="popup-overlay" id="popupOverlay">
+            <div class="popup-content">
+                <h3>Prediction Result</h3>
+                <p id="predictionResult">Loading...</p>
+                <button class="close-popup-btn" onclick="closePopup()">Close</button>
+            </div>
+        </div>
+
+        <!-- Cancer Form -->
+        <div class="form-container" id="cancerForm">
+            <label>Mean Radius</label><input type="number" id="meanRadius">
+            <label>Mean Texture</label><input type="number" id="meanTexture">
+            <label>Mean Perimeter</label><input type="number" id="meanPerimeter">
+            <label>Mean Area</label><input type="number" id="meanArea">
+            <label>Mean Smoothness</label><input type="number" id="meanSmoothness">
+            <button class="submit-btn" onclick="submitData('cancer')">Submit Cancer Data</button>
+        </div>
+
+        <!-- Heart Disease Form -->
+        <div class="form-container" id="heartForm">
+            <label>Age</label><input type="number" id="heart-age">
+            <label>Sex</label><input type="number" id="sex">
+            <label>Chest Pain</label><input type="number" id="chestPain">
+            <label>Cholesterol</label><input type="number" id="Cholesterol">
+            <button class="submit-btn" onclick="submitData('heart')">Submit Heart Data</button>
+        </div>
+
+        <!-- Parkinson's Form -->
+        <div class="form-container" id="parkinsonsForm">
+            <label>MDVP:Fo(Hz)</label><input type="number" id="mdvpFoHz">
+            <label>MDVP:Fhi(Hz)</label><input type="number" id="mdvpFhiHz">
+            <label>MDVP:Flo(Hz)</label><input type="number" id="mdvpFloHz">
+            <label>MDVP:Jitter(%)</label><input type="number" id="mdvpJitter">
+            <label>MDVP:Shimmer</label><input type="number" id="mdvpShimmer">
+            <button class="submit-btn" onclick="submitData('parkinsons')">Submit Parkinson's Data</button>
+        </div>
+
+        <!-- Diabetes Form -->
+        <div class="form-container" id="diabetesForm">
+            <label>Pregnancies</label><input type="number" id="pregnancies">
+            <label>Glucose</label><input type="number" id="glucose">
+            <label>Blood Pressure</label><input type="number" id="bloodPressure">
+            <label>Skin Thickness</label><input type="number" id="skinThickness">
+            <label>Insulin</label><input type="number" id="insulin">
+            <label>Body Mass Index</label><input type="number" id="bmi">
+            <label>Diabetes Pedigree Function</label><input type="number" id="diabetesPedigree">
+            <label>Age</label><input type="number" id="diabetesAge">
+            <button class="submit-btn" onclick="submitData('diabetes')">Submit Diabetes Data</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm(formId) {
+            const forms = document.querySelectorAll('.form-container');
+            forms.forEach(form => {
+                if (form.id === formId) {
+                    form.style.display = form.style.display === 'block' ? 'none' : 'block';
+                } else {
+                    form.style.display = 'none';
+                }
+            });
+        }
+
+        function submitData(disease) {
+            let data;
+            switch (disease) {
+                case 'cancer':
+                    data = {
+                        meanRadius: document.getElementById('meanRadius').value,
+                        meanTexture: document.getElementById('meanTexture').value,
+                        meanPerimeter: document.getElementById('meanPerimeter').value,
+                        meanArea: document.getElementById('meanArea').value,
+                        meanSmoothness: document.getElementById('meanSmoothness').value
+                    };
+                    break;
+                case 'heart':
+                    data = {
+                        age: document.getElementById('heart-age').value,
+                        sex: document.getElementById('sex').value,
+                        chestPain: document.getElementById('chestPain').value,
+                        cholesterol: document.getElementById('Cholesterol').value
+                    };
+                    break;
+                case 'parkinsons':
+                    data = {
+                        mdvpFoHz: document.getElementById('mdvpFoHz').value,
+                        mdvpFhiHz: document.getElementById('mdvpFhiHz').value,
+                        mdvpFloHz: document.getElementById('mdvpFloHz').value,
+                        mdvpJitter: document.getElementById('mdvpJitter').value,
+                        mdvpShimmer: document.getElementById('mdvpShimmer').value
+                    };
+                    break;
+                case 'diabetes':
+                    data = {
+                        pregnancies: document.getElementById('pregnancies').value,
+                        glucose: document.getElementById('glucose').value,
+                        bloodPressure: document.getElementById('bloodPressure').value,
+                        skinThickness: document.getElementById('skinThickness').value,
+                        insulin: document.getElementById('insulin').value,
+                        bmi: document.getElementById('bmi').value,
+                        diabetesPedigree: document.getElementById('diabetesPedigree').value,
+                        age: document.getElementById('diabetesAge').value
+                    };
+                    break;
+            }
+
+            // Here, you would typically send this data to your server for prediction
+            // For demonstration purposes, we'll just show a simple prediction result.
+            showPredictionResult(disease, data);
+        }
+
+        function showPredictionResult(disease, data) {
+            let resultText;
+            // Dummy logic for demonstration purposes
+            if (disease === 'cancer') {
+                resultText = 'Risk of cancer: ' + (Math.random() > 0.5 ? 'High' : 'Low');
+            } else if (disease === 'heart') {
+                resultText = 'Risk of heart disease: ' + (Math.random() > 0.5 ? 'High' : 'Low');
+            } else if (disease === 'parkinsons') {
+                resultText = 'Risk of Parkinson\'s disease: ' + (Math.random() > 0.5 ? 'High' : 'Low');
+            } else if (disease === 'diabetes') {
+                resultText = 'Risk of diabetes: ' + (Math.random() > 0.5 ? 'High' : 'Low');
+            }
+
+            document.getElementById('predictionResult').innerText = resultText;
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Wellness Well</title>
+    <style>
+        /* Reset and basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #1a1a1a;
+            color: white;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container styling */
+        .container {
+            text-align: center;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            margin-bottom: 2rem;
+            margin-top: 4rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #3498db;
+            margin-bottom: 2rem;
+        }
+
+        /* Profile Cards */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-role {
+            font-size: 1.1rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        /* Social Links */
+        .social-links {
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: #3498db;
+            margin: 0 0.5rem;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            color: #74b9ff;
+        }
+
+        /* Back to Home Button */
+        .back-button {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            color: white;
+            background: #3498db;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="container">
+        <h1>About Us</h1>
+        <div class="tagline">Meet Our Team</div>
+        
+        <div class="profile-grid">
+            <div class="profile-card">
+                <img src="piyush2.jpg" alt="Piyush Saini" class="profile-image">
+                <div class="profile-name">Piyush Saini</div>
+                <div class="profile-role">ML Engineer & Backend</div>
+                <div class="social-links">
+                    <a href="https://github.com/sainipiyush05" target="_blank">Github</a>
+                    <a href="https://www.linkedin.com/in/piyush-saini-8bb40827a/" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+            <div class="profile-card">
+                <img src="soubhik.jpg" alt="Soubhik Sadhu" class="profile-image">
+                <div class="profile-name">Soubhik Sadhu</div>
+                <div class="profile-role">UI/UX Designer & App Dev</div>
+                <div class="social-links">
+                    <a href="https://www.github.com/SoubhLance" target="_blank">Github</a>
+                    <a href="https://www.linkedin.com/in/soubhik-sadhu-0427b4288?" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+            <div class="profile-card">
+                <img src="sumedha.jpg" alt="Sumedha Parashar" class="profile-image">
+                <div class="profile-name">Sumedha Parashar</div>
+                <div class="profile-role">Web Dev</div>
+                <div class="social-links">
+                    <a href="https://github.com/sumedhaparashar" target="_blank">Github</a>
+                    <a href="https://www.linkedin.com/in/sumedha-parashar-3406a9283?" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        
+        <button class="back-button" onclick="goBack()">Back to Home</button>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "home.html"; // Navigate back to index.html
+        }
+    </script>
+</body>
+</html>

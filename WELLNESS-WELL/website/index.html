@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Well - Disease Predictor</title>
+    <style>
+        /* Reset and basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #1a1a1a;
+            color: white;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container styling */
+        .container {
+            text-align: center;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            margin-bottom: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Headings and tagline */
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #3498db;
+            margin-bottom: 2rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Button styling */
+        .buttons-container, .disease-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            color: white;
+            background: #3498db;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.6);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+        }
+
+        /* Features section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.7); /* Darker background */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #2c2c2c;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #3498db;
+            width: 80%; 
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            color: white;
+            margin-top: 20px;
+            line-height: 1.5; 
+        }
+
+        /* Additional styling for the list */
+        .disease-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Three columns */
+            gap: 1.5rem;
+            margin-top: 20px;
+        }
+
+        .disease-card {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .disease-card:hover {
+            transform: translateY(-2px);
+            background: rgba(52, 152, 219, 0.3); /* Change background on hover */
+        }
+
+        .disease-icon {
+            font-size: 1.5rem;
+            margin-right: 10px; /* Space between icon and text */
+        }
+
+        /* Styling for the second row */
+        .disease-grid.second-row {
+            grid-template-columns: repeat(2, 1fr); /* Two columns for the second row */
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Wellness Well</h1>
+        <div class="tagline">Your Health, Our Priority</div>
+        
+        <p>Welcome to Wellness Well, your trusted companion in preventive healthcare. Our advanced disease prediction system uses cutting-edge algorithms to analyze your health indicators and provide early insights about potential health risks.</p>
+        
+        <div class="buttons-container">
+            <button class="btn" onclick="getStarted()">Get Started</button>
+            <button class="btn secondary-btn" onclick="openModal()">Learn More</button>
+            <button class="btn secondary-btn" onclick="window.location.href='about.html'">About Us</button>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔬</div>
+                <h3>Advanced Analysis</h3>
+                <p>State-of-the-art prediction algorithms</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure & Private</h3>
+                <p>Your data is protected and encrypted</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Detailed Reports</h3>
+                <p>Comprehensive health insights</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-body">
+                <h2>Learn More About Diseases</h2>
+                <p>Here are brief explanations of some common diseases:</p>
+                <div class="disease-grid">
+                    <div class="disease-card">
+                        <span class="disease-icon">❤️</span>
+                        <strong>Heart Disease:</strong> Refers to various types of heart conditions, often involving narrowed or blocked blood vessels. This can lead to chest pain, heart attacks, or other serious complications if not managed properly.
+                    </div>
+                    <div class="disease-card">
+                        <span class="disease-icon">🎀</span>
+                        <strong>Breast Cancer:</strong> A type of cancer that forms in the cells of the breasts, often detected through lumps or changes in breast appearance. Early screening and awareness of risk factors can greatly improve the chances of successful treatment.
+                    </div>
+                    <div class="disease-card">
+                        <span class="disease-icon">🩸</span>
+                        <strong>Diabetes:</strong> A chronic condition that affects how your body processes sugar, leading to high blood sugar levels. It can cause serious health complications over time, including heart disease and kidney damage.
+                    </div>
+                </div>
+                <div class="disease-grid second-row">
+                    <div class="disease-card">
+                        <span class="disease-icon">🧠</span>
+                        <strong>Stroke:</strong> A medical emergency caused by a disruption of blood supply to the brain. Quick treatment is crucial to minimize brain damage and potential long-term effects.
+                    </div>
+                    <!-- <div class="disease-card">
+                        <span class="disease-icon">🦴</span>
+                        <strong>Osteoporosis:</strong> A condition characterized by weak and brittle bones, increasing the risk of fractures. Lifestyle changes and medications can help manage this disease.
+                    </div> -->
+                    <div class="disease-card">
+                        <span class="disease-icon">🧬</span>
+                        <strong>Parkinson's Disease:</strong> A progressive nervous system disorder that affects movement. It can lead to tremors, stiffness, and difficulty with balance and coordination.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to open modal
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
+        // Function to get started (navigates to disease-selection.html)
+        function getStarted() {
+            window.location.href = "disease-selection.html"; // Adjust path if necessary
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

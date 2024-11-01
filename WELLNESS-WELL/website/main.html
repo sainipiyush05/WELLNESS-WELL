@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Well - Disease Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #000000;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(52, 152, 219, 0.2);
+            pointer-events: none;
+            transform-origin: center center;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 1.5rem;
+            z-index: 3;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            text-align: center;
+            padding: 3rem;
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            animation: glow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #3498db;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideUp 1s forwards;
+            animation-delay: 0.5s;
+        }
+
+        p {
+            font-size: 1.3rem;
+            color: #e0e0e0;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            max-width: 800px;
+            opacity: 0;
+            animation: slideUp 1s forwards;
+            animation-delay: 1s;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            opacity: 0;
+            animation: slideUp 1s forwards;
+            animation-delay: 1.5s;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            color: white;
+            background: #3498db;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.6);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid #3498db;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            opacity: 0;
+            animation: slideUp 1s forwards;
+            animation-delay: 2s;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(52, 152, 219, 0.8),
+                             0 0 30px rgba(52, 152, 219, 0.6);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            p {
+                font-size: 1.1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="particleContainer"></div>
+    
+    <div class="nav-container">
+        <button class="nav-btn" onclick="navigate('about')">About Us</button>
+        <button class="nav-btn" onclick="navigate('chat')">Chat Assist</button>
+        <button class="nav-btn" onclick="navigate('contact')">Get in Touch</button>
+    </div>
+
+    <div class="main-container">
+        <div class="container">
+            <div class="logo-container">
+                <h1>Wellness Well</h1>
+                <div class="tagline">Your Health, Our Priority</div>
+            </div>
+            
+            <p>Welcome to Wellness Well, your trusted companion in preventive healthcare. Our advanced disease prediction system uses cutting-edge algorithms to analyze your health indicators and provide early insights about potential health risks. Take control of your health journey today with our user-friendly and accurate prediction tools.</p>
+            
+            <div class="buttons-container">
+                <button class="btn" onclick="getStarted()">Get Started</button>
+                <button class="btn secondary-btn" onclick="learnMore()">Learn More</button>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔬</div>
+                    <h3>Advanced Analysis</h3>
+                    <p>State-of-the-art prediction algorithms</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Private</h3>
+                    <p>Your data is protected and encrypted</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Detailed Reports</h3>
+                    <p>Comprehensive health insights</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create interactive background
+        function createParticles() {
+            const container = document.getElementById('particleContainer');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 15 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                const duration = Math.random() * 20 + 10;
+                particle.style.animation = `
+                    moveParticle ${duration}s infinite linear,
+                    pulseSize ${duration/2}s infinite alternate ease-in-out
+                `;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes moveParticle {
+                0% { transform: translate(0, 0) rotate(0deg); }
+                100% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotate(360deg); }
+            }
+            @keyframes pulseSize {
+                0% { transform: scale(1); }
+                100% { transform: scale(1.5); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function navigate(page) {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                window.location.href = `/${page}.html`;
+            }, 500);
+        }
+
+        function getStarted() {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                window.location.href = '/predict.html';
+            }, 500);
+        }
+
+        function learnMore() {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateX(-20px)';
+            setTimeout(() => {
+                window.location.href = '/learn-more.html';
+            }, 500);
+        }
+
+        // Initialize particles on load
+        window.onload = createParticles;
+
+        // Add hover effect to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px)';
+                card.style.background = 'rgba(255, 255, 255, 0.15)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.background = 'rgba(255, 255, 255, 0.05)';
+            });
+        });
+    </script>
+</body>
+</html>

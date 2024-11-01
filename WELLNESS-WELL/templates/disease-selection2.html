@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Selection</title>
+    <style>
+        /* Reset and basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            width: 100%;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .disease-buttons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .disease-btn, .back-btn {
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            color: white;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            height: 100%;
+        }
+
+        .disease-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            background: rgba(52, 152, 219, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Form styling */
+        .form-container {
+            display: none;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container label {
+            display: block;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .form-container .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-container input {
+            width: 80%;
+            padding: 0.6rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .form-container input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.6);
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 80%;
+            height: 2rem
+            transition: background 0.3s ease;
+            margin-top: 4rem;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 2rem;
+            }
+
+            .disease-btn, .back-btn {
+                padding: 1.2rem;
+                font-size: 1rem;
+            }
+
+            .form-container {
+                padding: 1rem;
+            }
+
+            .form-container input {
+                width: 100%;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Select a Disease to Predict</h2>
+        <div class="disease-buttons-container">
+            <button class="disease-btn" onclick="toggleCancerForm()">Cancer Prediction</button>
+            <button class="disease-btn" onclick="toggleHeartForm()">Heart Disease Prediction</button>
+            <button class="disease-btn" onclick="toggleParkinsonsForm()">Parkinson's Prediction</button>
+            <button class="disease-btn" onclick="toggleDiabetesForm()">Diabetes Prediction</button>
+            <button class="disease-btn" onclick="predictDisease('Brain Health')">Brain Health Prediction</button>
+        </div>
+        
+        <!-- Cancer Prediction Form -->
+        <div class="form-container" id="cancerForm">
+            <div class="input-group">
+                <label for="mean-radius">Mean Radius</label>
+                <input type="number" id="mean-radius" placeholder="Enter mean radius">
+            </div>
+            <div class="input-group">
+                <label for="mean-perimeter">Mean Perimeter</label>
+                <input type="number" id="mean-perimeter" placeholder="Enter mean perimeter">
+            </div>
+            <div class="input-group">
+                <label for="mean-area">Mean Area</label>
+                <input type="number" id="mean-area" placeholder="Enter mean area">
+            </div>
+            <div class="input-group">
+                <label for="fractal-dimension-error">Fractal Dimension Error</label>
+                <input type="number" id="fractal-dimension-error" placeholder="Enter fractal dimension error">
+            </div>
+            <button class="submit-btn" onclick="submitCancerData()">Submit Cancer Data</button>
+        </div>
+
+        <!-- Heart Disease Prediction Form -->
+        <div class="form-container" id="heartForm">
+            <div class="input-group">
+                <label for="heart-age">Age</label>
+                <input type="number" id="heart-age" placeholder="Enter age">
+            </div>
+            <div class="input-group">
+                <label for="sex">Sex</label>
+                <input type="number" id="sex" placeholder="Enter sex (1 for male, 0 for female)">
+            </div>
+            <div class="input-group">
+                <label for="chestPain">Chest Pain</label>
+                <input type="number" id="chestPain" placeholder="Enter chest pain type (0-3)">
+            </div>
+            <div class="input-group">
+                <label for="cholesterol">Cholesterol</label>
+                <input type="number" id="cholesterol" placeholder="Enter cholesterol level">
+            </div>
+            <button class="submit-btn" onclick="submitHeartData()">Submit Heart Data</button>
+        </div>
+
+        <!-- Parkinson's Prediction Form -->
+        <div class="form-container" id="parkinsonsForm">
+            <div class="input-group">
+                <label for="fhi">MDVP:Fhi(Hz)</label>
+                <input type="number" id="fhi" placeholder="Enter MDVP:Fhi(Hz)">
+            </div>
+            <div class="input-group">
+                <label for="flo">MDVP:Flo(Hz)</label>
+                <input type="number" id="flo" placeholder="Enter MDVP:Flo(Hz)">
+            </div>
+            <div class="input-group">
+                <label for="jitter">MDVP:Jitter(%)</label>
+                <input type="number" id="jitter" placeholder="Enter MDVP:Jitter(%)">
+            </div>
+            <button class="submit-btn" onclick="submitParkinsonsData()">Submit Parkinson's Data</button>
+        </div>
+
+        <!-- Diabetes Prediction Form -->
+        <div class="form-container" id="diabetesForm">
+            <div class="input-group">
+                <label for="BMI">BMI</label>
+                <input type="number" id="BMI" placeholder="Enter BMI">
+            </div>
+            <div class="input-group">
+                <label for="glucose">Glucose</label>
+                <input type="number" id="glucose" placeholder="Enter glucose level">
+            </div>
+            <div class="input-group">
+                <label for="blood-pressure">Blood Pressure</label>
+                <input type="number" id="blood-pressure" placeholder="Enter blood pressure">
+            </div>
+            <button class="submit-btn" onclick="submitDiabetesData()">Submit Diabetes Data</button>
+        </div>
+
+        <button class="back-btn" onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        function toggleCancerForm() {
+            document.getElementById("cancerForm").style.display = "block";
+            document.getElementById("heartForm").style.display = "none";
+            document.getElementById("parkinsonsForm").style.display = "none";
+            document.getElementById("diabetesForm").style.display = "none";
+        }
+
+        function toggleHeartForm() {
+            document.getElementById("heartForm").style.display = "block";
+            document.getElementById("cancerForm").style.display = "none";
+            document.getElementById("parkinsonsForm").style.display = "none";
+            document.getElementById("diabetesForm").style.display = "none";
+        }
+
+        function toggleParkinsonsForm() {
+            document.getElementById("parkinsonsForm").style.display = "block";
+            document.getElementById("cancerForm").style.display = "none";
+            document.getElementById("heartForm").style.display = "none";
+            document.getElementById("diabetesForm").style.display = "none";
+        }
+
+        function toggleDiabetesForm() {
+            document.getElementById("diabetesForm").style.display = "block";
+            document.getElementById("cancerForm").style.display = "none";
+            document.getElementById("heartForm").style.display = "none";
+            document.getElementById("parkinsonsForm").style.display = "none";
+        }
+
+        function goBack() {
+            document.getElementById("cancerForm").style.display = "none";
+            document.getElementById("heartForm").style.display = "none";
+            document.getElementById("parkinsonsForm").style.display = "none";
+            document.getElementById("diabetesForm").style.display = "none";
+        }
+
+        function submitCancerData() {
+            const meanRadius = document.getElementById("mean-radius").value;
+            const meanPerimeter = document.getElementById("mean-perimeter").value;
+            const meanArea = document.getElementById("mean-area").value;
+            const fractalDimensionError = document.getElementById("fractal-dimension-error").value;
+
+            // Add your data processing logic here
+            console.log(`Cancer Data: ${meanRadius}, ${meanPerimeter}, ${meanArea}, ${fractalDimensionError}`);
+        }
+
+        function submitHeartData() {
+            const age = document.getElementById("heart-age").value;
+            const sex = document.getElementById("sex").value;
+            const chestPain = document.getElementById("chestPain").value;
+            const cholesterol = document.getElementById("cholesterol").value;
+
+            // Add your data processing logic here
+            console.log(`Heart Data: ${age}, ${sex}, ${chestPain}, ${cholesterol}`);
+        }
+
+        function submitParkinsonsData() {
+            const fhi = document.getElementById("fhi").value;
+            const flo = document.getElementById("flo").value;
+            const jitter = document.getElementById("jitter").value;
+
+            // Add your data processing logic here
+            console.log(`Parkinson's Data: ${fhi}, ${flo}, ${jitter}`);
+        }
+
+        function submitDiabetesData() {
+            const pregnancies = document.getElementById("BMI").value;
+            const glucose = document.getElementById("glucose").value;
+            const bloodPressure = document.getElementById("blood-pressure").value;
+
+            // Add your data processing logic here
+            console.log(`Diabetes Data: ${pregnancies}, ${glucose}, ${bloodPressure}`);
+        }
+    </script>
+</body>
+</html>
