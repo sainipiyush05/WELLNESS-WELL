@@ -1,8 +1,9 @@
 # 🌿 WELLNESS-WELL: Disease Prediction System
 
+
 Welcome to the **WELLNESS-WELL** Disease Prediction System! This project integrates Machine Learning with a user-friendly web interface to predict potential diseases based on user-provided symptoms. Powered by Flask, it offers real-time, accessible predictions to assist users in understanding possible health concerns.
 
----
+----
 
 ## 📋 Table of Contents
 
